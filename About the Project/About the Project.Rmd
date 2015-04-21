@@ -1,35 +1,35 @@
 ---
-title: "Introduction to Open Source Patent Analytics"
+title: "About the Open Source Patent Analytics Project"
 author: "Paul Oldham"
 date: "3 March 2015"
-output: beamer_presentation
+output: slidy_presentation
 ---
 
 ## About the Project
 
-1. This project provides practical guidance and resources in the use of open source patent analysis tools. 
+1. This project provides practical guidance and resources in the use of open source tools for patent analysis. 
 2. Patent information is a valuable source of technical data on trends in scientific research and development and is increasingly used to inform policy debates and decisions. 
 3. Millions of patent records are available online through patent databases such as [EPO espacenet](http://worldwide.espacenet.com/?locale=en_EP), [Patent Scope](https://patentscope.wipo.int/search/en/search.jsf) and [Patent Lens](http://www.lens.org/lens/) and [Free Patents Online](http://www.freepatentsonline.com).
 3. The questions this project seeks to address are:
     + How to obtain patent data in a form that is useful for different types of analysis?
-    + How to process, analyse and visualize patent data using only open source or free software?
+    + How to tidy, analyse, visualize and share patent data using open source or free software?
     + How to promote confidence that the results of analysis are transparent and robust for informed decision-making? 
 
 ## Topics
 
-The project is presently divided into seven main topics but we will see how it develops:
+The project is divided into seven main topics but we will see how it develops:
 
 1. Approaching Patent Data
-2. Getting Patent Data
+2. Obtaining Patent Data
 3. Tidying Patent Data
 4. Analysing Patent Data
 5. Visualising Patent Data
 6. Sharing Patent Data
 7. Tools and Resources
 
-Each of these topics will be accompanied by documentation, videos, code and resources to assist with patent analysis. A set of [patent datasets](https://github.com/poldham/opensource-patent-analytics/tree/master/patent_datasets) are provided to help you get started with working examples. 
+Each of these topics will be accompanied by documentation, videos, code and resources to assist with patent analysis. The project home page and repository is hosted on [Github](http://poldham.github.io/opensource-patent-analytics/) which includes links to the [Open Source Patent Analytics](https://www.youtube.com/channel/UCwFhEASbKdm6WYoax73XsOw) YouTube channel of video walkthroughs on software and common tasks. We have created a set of patent datasets that are accessible on the project's [Google Drive](https://drive.google.com/folderview?id=0B4piiKOCkRPDNThTWU1QQVYyRnM&usp=sharing) and on the Github repository.
 
-We welcome your inputs to the project by contributing files, code or tips to the GitHub repository or the project Wiki. Hopefully we can build a repository of useful open source tools that everyone can use. 
+We welcome your inputs to the project by contributing files, code or tips to the GitHub repository and will be developing the project wiki. Hopefully we can build a repository of useful open source tools that everyone can use. 
 
 ## Tools
 
