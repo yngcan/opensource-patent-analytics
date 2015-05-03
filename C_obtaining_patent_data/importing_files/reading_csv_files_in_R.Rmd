@@ -1,11 +1,11 @@
 ---
-title: "Importing CSV files into R"
+title: "importing_csv_files_r"
 author: "Paul Oldham"
 date: "29 April 2015"
 output: html_document
 ---
 
-#Importing CSV files into R
+##Importing CSV files into R
 
 Comma separated value files (or .csv) files are one of the most common and useful ways for sharing data. This includes patent data. 
 
@@ -25,7 +25,7 @@ That should cover most needs. If you find that you are stuck with a dataset try 
 Reading in a .csv file is easy and is part of read.table in the R Utils package (installed by default). We can simply read in a .csv by creating an object linked to the function read.csv followed by the path to the local file as follows. 
 
 ```{r eval=FALSE}
-ritonavir <- read.csv("yourfilenamepath.csv")
+ritonavir <- read.csv("/Users/colinbarnes/Desktop/open_source_master/2_DATASETS/ritonavir/ritonavir.csv")
 ```
 
 In some European countries the delimiter in a .csv is a semicolon ";" and not a comma. In the unlikely event you come across these files use read.csv2() as above instead of read.csv.
@@ -39,6 +39,8 @@ First, let's look at the function read.csv and its arguments in a bit more detai
 ```
 
 read.csv(file, header = TRUE, sep = ",", quote = "\"", dec = ".", fill = TRUE, comment.char = "", ...)
+
+##[Note that dec = "." may be causing the problem with the publication date separator as it reads it as a decimal separator]
 
 The arguments for this function can be very useful, for example, 
 
@@ -55,7 +57,7 @@ The ... refers to additional arguments that might be applied. Among the most imp
 This means that we would often want a read.csv function with the following additional arguments for our file.  
 
 ```{r eval=FALSE}
-ritonavir1 <- read.csv("yourfilenamepath.csv", sep = ",", na.strings = "NA", strip.white = TRUE, stringsAsFactors = FALSE)
+ritonavir1 <- read.csv("/Users/colinbarnes/Desktop/open_source_master/2_DATASETS/ritonavir/ritonavir.csv", sep = ",", na.strings = "NA", strip.white = TRUE, stringsAsFactors = FALSE)
 ```
 
 Note here that the use of sep = "," is the condition for stripping leading and trailing white space on import using strip.white = TRUE. 
@@ -114,17 +116,19 @@ We are now good to go. If we wanted to write this data table to a new csv file w
 
 The critical point to remember here is to give the file a new filename or it will overwrite your original data. It is also worth checking your working directory so that you know where it will be saved. 
 
-```{r eval=FALSE}
+```{r}
 getwd()
 ```
 
 To write the file with a new file name we will use write.csv()
 
 ```{r eval=FALSE}
-write.csv(ritonavir2, "ritonavir2.csv")
+write.csv(ritonavir2, "ritonavir2.csv", row.names = FALSE)
 ```
 
-This will write a file called ritonavir2.csv to your working directory. If you take a look at the file note that an extra column will have been added and column names will now contain fullstops instead of spaces. 
+This will write a file called ritonavir2.csv to your working directory. If you do not use row.names = FALSE an extra column will be added in the first column. For some reason a new column will be added every time you write the file. So, it is always best to use row.names = FALSE. 
+
+Column names will now contain fullstops instead of spaces. 
 
 Let's take a look at the options for writing .csv files by calling help. 
 ```{r}
@@ -144,7 +148,7 @@ A couple of these settings may be useful.
 2. na = "NA" the string that you want to use for missing data. This may need further definition depending on your data (e.g. na = c("NA", " ", "")).
 3. row.names and col.names may be useful depending on your dataset or needs. Note that the default is TRUE. This is generally correct for columns with patent data but not for rows. 
 
-We have now covered the basics of importing a .csv file into R and then writing a file. Some of these steps are not as easy as they could be. To address that we will look at the recent readr package a little further on. First we will look at reading a .csv file from the web.
+We have now covered the basics of importing a .csv file into R and then writing a file. Some of these steps are not as easy as they could be. To address that we will look at the recent readr package.
 
 ##Reading a .csv from the web
 
@@ -155,6 +159,8 @@ For example if we try the following it will generally work with http: but not wi
 ```{r eval=FALSE}
 ritonavir_url <- read.csv("https://drive.google.com/open?id=0B4piiKOCkRPDTGdSQmRMa1BOUEE&authuser=0")
 ```
+
+The above will throw an error saying https: URLs are not supported.
 
 To deal with this we need to install and load the package RCurl.
 
@@ -178,13 +184,13 @@ In this case we use download.file and the URL in quotes, followed by the destina
 
 ###Downloading from GitHub
 
-In downloading from GitHub (where the project Google Drive datasets are also located), we have to go a step further. The URL that you see on the page in Github is basically a marker for the data location... not the actual dataset location. To access the actual dataset navigate to the relevant page [here](https://github.com/poldham/opensource-patent-analytics/blob/master/datasets/ritonavir/ritonavir.csv). However, then select the Raw button and copy that *URL*. The URL should begin with https:raw. as below. 
+In downloading from GitHub (where the project Google Drive datasets are also located), we have to go a step further. The URL that you see on the page in Github is basically a marker for the data location... not the actual dataset location. To access the actual dataset navigate to the relevant page [here](https://github.com/poldham/opensource-patent-analytics/blob/master/datasets/ritonavir/ritonavir.csv). However, then select the Raw button and copy that **URL. The URL should begin with https:raw. as below. 
 
 ```{r eval=FALSE}
 ritonavir_urlg <- download.file("https://raw.githubusercontent.com/poldham/opensource-patent-analytics/master/datasets/ritonavir/ritonavir.csv", "ritonavir_urlg.csv", method = "curl")
 ```
 
-##Using the new readr package.
+##Using the new readr package to read .csv  and write csv files.
 
 If you don't have readr use the following to install it. 
 
@@ -229,11 +235,11 @@ This tells us that the function will assume that there are column names in the f
 
 The main advantages of read_csv over read.csv are:
 
-1. read_r does not automatically read in character vectors (columns) as factors. This means there is no need to specify stringsAsFactors = FALSE as part of the function's arguments. This will be a very great relief to many people as it is one less thing to remember! 
-2. The problems() prompt advises you that problems may exist with reading the file. You might be able to fix or ignore them.
-3. For larger files a progress indicator will display on loading (in interactive mode) where the load is over 5 seconds.
-4. Column names are left as is. That means that publication number stays as publication number rather than becoming publication.number and requiring renaming. 
-5. By default, readr turns imported data into a data.frame, a table (tbl) and a table dataframe (tbl_df). That means if you are running dplyr then it will automatically show the first ten rows and the column name. That may not sound exciting but it is a lot better than the alternative. 
+-1. read_r does not automatically read in character vectors (columns) as factors. This means there is no need to specify stringsAsFactors = FALSE as part of the function's arguments. This will be a very great relief to many people as it is one less thing to remember! 
+-2. The problems() prompt advises you that problems may exist with reading the file. You might be able to fix or ignore them.
+-3. For larger files a progress indicator will display on loading (in interactive mode) where the load is over 5 seconds.
+-4. Column names are left as is. That means that publication number stays as publication number rather than becoming publication.number and requiring renaming. 
+-5. By default, readr turns imported data into a data.frame, a table (tbl) and a table dataframe (tbl_df). That means if you are running dplyr then it will automatically show the first ten rows and the column name. That may not sound exciting but it is a lot better than the alternative. 
 
 However, as read_r is a new package that is being actively developed there are also some issues. The development version is available [here](https://github.com/hadley/readr/blob/master/README.md) 
 
@@ -279,4 +285,4 @@ Bear in mind that readr does not possess the functionality of the equivalents as
 
 ##Round Up
 
-In this walkthrough we have covered the fundamentals of reading and writing .csv files in R. This is pretty much the easiest file format to work with for patent data and considerably better than Excel which we will cover next. 
+In this walkthrough we have covered the fundamentals of reading and writing .csv files in R. 
