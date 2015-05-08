@@ -3,10 +3,10 @@ title: "Understanding Patent Documents and Data Fields"
 author: "Paul Oldham"
 date: "23 March 2015"
 output:
-  slidy_presentation: default
   ioslides_presentation:
     fig_height: 5
     fig_width: 5
+  slidy_presentation: default
 ---
 
 ##What is a Patent?
