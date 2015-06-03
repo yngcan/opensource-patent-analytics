@@ -1,0 +1,138 @@
+---
+title: "Patent Data in Tableau"
+author: "Paul Oldham"
+date: "3 June 2015"
+output: html_document
+---
+
+In this article we will be analysing and visualising patent data using Tableau Public. 
+
+Tableau Public is a free version of Tableau Desktop and provides a very good practical introduction to the use of patent data for analysis and visualisation. In many cases Tableau Public will represent the standard that other open source and free tools will need to meet. 
+
+This is a practical demonstration of the use of Tableau in patent analytics. We have created a set of cleaned patent data tables on `pizza patents` that you can download from here to use during the walkthrough. Details of the cleaning process to reach this stage are provided in the codebook. The [Open Refine walkthrough](http://poldham.github.io/openrefine-patent-cleaning/) can be used to generate cleaned files similar to those used in this walkthrough with your own data. You will not need to clean any data using our training set files. 
+
+This article will take you through the main features of Tableau using Tableau Public and the types of analysis and visualisation that can be performed using Tableau.
+
+##Installing Tableau
+
+Tableau can be installed for your operating system by visiting the [Tableau Public website](https://public.tableau.com/s/) and entering your email address as in the image below. 
+
+![_config.yml]({{ site.baseurl }} /images/tableau/providemail.png)
+
+While you are waiting for the app to download it is a good idea to select `Sign In` and then `Create one now for Free` to sign up for a Tableau Public Account that will allow you to load up your workbooks to the web and share them.
+
+![_config.yml]({{ site.baseurl }} /images/tableau/signup.png)
+
+This will lead you to an empty profile page
+
+![_config.yml]({{ site.baseurl }} /images/tableau/profile.png)
+
+While you are there you might want to check out the [Gallery](https://public.tableau.com/s/gallery) of other Tableau Public workbooks to get some ideas on what it is possible to achieve with Tableau. You may want to visit the profile of the author of this walkthrough to view a [Tableau Workbook](https://public.tableau.com/profile/poldham#!/) for scientific literature that accompanied this [PLOS ONE article on synthetic biology](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0034368). While it is now a few years old it gives an idea of the possibilities of Tableau and the the feel of a profile page.  
+
+![_config.yml]({{ site.baseurl }} /images/tableau/gallery.png)
+
+##Getting Started
+
+When you first open the application you will see a blank page. Before we load some data, note the helpful How-to-Videos on the right and the link to a visualisation of the day. There are also quite a lot of training videos [here](http://www.tableau.com/learn/training) and a very useful [community forum](http://community.tableau.com/community/forums). If you get stuck, or wonder how somebody produced a cool visualisation this is the place to look. 
+
+![_config.yml]({{ site.baseurl }} /images/tableau/open.png)
+
+To avoid staring at a blank page we now need to load some data. In Tableau Public this is limited to text or Excel files. To download the data as a single `.zip` file click [here](https://github.com/poldham/opensource-patent-analytics/blob/master/2_datasets/pizza_medium_clean/pizza_medium_clean.zip?raw=true) or visit the [GitHub repository](https://github.com/poldham/opensource-patent-analytics/blob/master/2_datasets/pizza_medium_clean/pizza_medium_clean.zip).
+
+![_config.yml]({{ site.baseurl }} /images/tableau/github.png)
+
+As we can see above there are 7 files in this dataset. The `core` or reference file is `pizza.csv`. All other files are aspects of that file, such as applicants, inventors and international patent classification codes. That is concatenated fields in pizza have been separated out and cleaned up. One file, `applicants_ipc` is a child file of `applicants` that will allow us to access ipc information for individual applicants. This may not make a lot of sense at the moment but don't worry it will shortly. 
+
+To get started we will select the `pizza.csv` file:
+
+![_config.yml]({{ site.baseurl }} /images/tableau/load_file.png)
+
+We will then see a new screen showing some oif the data and the other files in the folder. At the bottom is a flag with `Go to Worksheet`, so let's do that. 
+
+![_config.yml]({{ site.baseurl }} /images/tableau/pizza1.png)
+
+We will now see a screen that is divided in to `Dimensions` on the left, with `Measures` below. We can see that in the dimensions there are quite a large number of data fields. Note that Tableau will attempt to guess the type of data (for example numeric or date information is marked with `#` while geographic data is marked with a globe, text fields are marked with `Abc`). Note that Tableau does not always get this right and that it is possible to change a data type by selecting a field and right clicking as we can see below. 
+
+![_config.yml]({{ site.baseurl }} /images/tableau/tableau_fields.png)
+
+On the right hand side we can see a floating panel menu. This displays the visualisation options that are available for the data field that we have selected. In this case two map options are available because Tableau has automatically recognised the country names as geographic information. Note that persuading Tableau to present the option that you want (for example visualising year on year data as a line graph) can involve changing the settings for the field until the option becomes available (typically from discrete to continuous or vice versa). 
+
+At the bottom of the screen we will see a worksheet number `Sheet 1` and then options for adding three types of sheet:
+
+1. A New Worksheet
+2. A New Dashboard
+3. A New Story
+
+For the moment we will focus on building worksheets with the data and then move into creating Dashboards and then stories around the data. 
+
+##Publication Trends
+
+One of the first things we normally want to do with patent data is to map trends, either in first filings, publications or family members. In the case of our pizza patents from Patentscope the data is a single member of a dossier of files linked to a particular application. However, this data is fine for demonstration needs and we can easily map trends for this data. 
+
+To do that we simply drag the publication year in the dimensions to the columns field and the number of records from the measures field. Note that Tableau automatically counts the number of rows in a set to create this field. If working with data where accurate counts are important it is important to make sure that the data has been deduplicated on the relevant field before starting. 
+
+Tableau will guess what we are after and draw a graph. 
+
+![_config.yml]({{ site.baseurl }} /images/tableau/publication_trend.png)
+
+As we can see we now have a graph that plunges off a cliff as we approach the present and contains one null. The first issue reflects the common issue that the availability of patent data declines as we move closer to the present. Typically we need to pull back about 2 to 3 years to gain an impression of the trend. First we will deal with the null by simply clicking it and using Hide indicator. If there were lots of nulls we would want to take a very close look at the data. 
+
+Before we go any further and adjust the axis we will change the graph to something more attractive. To do that we will select filled graph in the floating panel. Behind that panel is a small colour button that will allow us to select a colour we like. The reason that we do this before adjusting the axis is that when we change the graphic type Tableau will revert any changes made to the axis. 
+
+Next we right click the x (lower) axis and adjust the time frame to something more sensible such as 1980 to 2013. As a very rough rule of thumb moving back two years from the present will take out the data cliff from the lack of published patent information. Note that if we were counting first filings (patent families) the decline would be earlier and much steeper. These lag effects, and ways to deal with them, have been investigated in detail by the [OECD patent statistics team](http://www.oecd.org/sti/inno/intellectual-property-statistics-and-analysis.htm), see in particular work on [nowcasting patent data](http://www.oecd.org/science/inno/39485567.pdf). 
+
+We now have a good looking graph with a sensible axis. Note here that if we were graphing multiple trends on the same graph (family and family members) we might prefer a straightforward line graph for the sake of clarity. 
+
+![_config.yml]({{ site.baseurl }} /images/tableau/publication_trend_fill.png)
+
+We will give this a name and add a new worksheet by clicking the icon next to our existing sheet. 
+
+The next piece of information we would like is who the most active applicants are. This will also start to expose issues about the different actors who use the term `pizza` in the patent system and encourage us to think about ways to drill down into the data to get more accurate information on technologies we might be interested in, such as, in this case, [musical pizza boxes](http://www.google.co.uk/patents/US8720690). 
+
+It is at this point that the work we did in a previous article on separating individual applicant names into their own rows and cleaning them up, becomes important. In this dataset we have taken this a step further using VantagePoint to separate out individuals from organisations. This information is found in the `Applicants Organisations` field in the dataset. Lets just drop that onto the worksheet as a row and then add the number of records as a column (tip, simply drop it onto the sheet).
+
+At first sight everything seems pretty good. But now we need to rank our applicants. To do that we select the small icon in the menu bar with a stacked bar pointing down. 
+
+![_config.yml]({{ site.baseurl }} /images/tableau/sort_applicants.png)
+
+We now see, as we would in the Excel raw file, that there are a significant number of blank entries for applicants in the underlying data, followed by 85 records for Google and 77 for Microsoft. This is also a very good indicator that there may be multiple uses of the word pizza in the patent system unless these software companies have started selling pizzas online. 
+
+In practice this is a partial view of activity by the applicants because elsewhere in the data the names are concatenated together. This is normally more obvious than in the present case through the presence of multiple names separated by `;`(to see this scroll down to the first entry for Unilever). These concatenated fields can ha
+
+![_config.yml]({{ site.baseurl }} /images/tableau/sort_applicants.png)
+
+To understand why this is a partial view we will now load the `applicants.csv` file which, if it shows up in the Data Sources can be dragged across to the pane where it says `Drag data sources here`. If pizza is present in the panel it can be unloaded first by clicking the `red x` next to the Tab (otherwise Tableau will attempt to join the tables). 
+
+Next, drag Applicants Orgs All onto the Rows. Then drag Number of Records from the dimensions onto the sheet or into the columns entry. Now choose the stacked bar icon as above to rank the applicants by the number of records. We will now see the following. 
+
+![_config.yml]({{ site.baseurl }} /images/tableau/applicants_organisations.png)
+
+Note the difference between the original applicants field (where Google scored a total of 85 records) and our separated and cleaned field where Google now scores 191 records. In short, before the separation and cleaning exercises we were only seeing 44% of activity in our dataset by Google involving the term pizza. This still does not mean that they have entered the online pizza business... but who would be surprised. What it does tell us is that patent analysis that does not separate or split the concatenated data and clean up name variants is missing over 60% of the story when viewed in terms of applicant activity. As this makes clear, the gains from separating or splitting and cleaning data are huge even where, as in this case, the original data appeared to be quite 'clean'. That appearance was deceptive. 
+
+Now we have a clearer view of what is happening with our applicants we can make this more attractive. To do that first select the blue bar in the floating panel. The worksheet will now be presented as ranked bars. Next, drag the number of records from Measures onto the `Label` button next to `Color`. That looks pretty good. If we wanted to go a step further we could now turn to the dimensions panel and drag `Applicants Orgs All`, onto the `Color` button. The bars will now turn to different colours for each applicant. If this is too, well spangly or glaring, simply grab `Applicants Orgs All` from under the buttons and move it towards dimensions to remove it. Finally, if we want to adjust the right alignment of the text to the left, then first right click on the name of a company, pick `Format` then alignment and left. While the default is right align, in practice left align creates more readable labels. To change the default do this with the first worksheet you create before creating any others. 
+
+We now have an applicants data table that looks, depending on your aesthetic sensibilities, like this. 
+
+![_config.yml]({{ site.baseurl }} /images/tableau/applicants_cleaned.png)
+
+At this stage we might want to take a couple of actions. To make the labels more visible, drag the line between the names and the columns to the right. This will open up some space. Next, think about editing long names down to something short. For example, International Business Machines Corporation, who are also not famous for pizzas, is a little bit too long. Right click on the name and select `Edit alias` as in the image below. 
+
+![_config.yml]({{ site.baseurl }} /images/tableau/edit_alias.png)
+
+Now edit the name to IBM. Note that where you discover you have missed a duplicate name in clean up (remember that we focus on good enough rather than perfect in data cleaning) it is also possible to highlight two rows, right click, look for a filing clip icon and group two entries onto a new name. However, the resulting named group must be used in all later analysis. Note that data cleaning is not a Tableau strength, Tableau is about data analysis and exploration through visualisation. 
+
+##Inventors
+
+We will follow the same procedure that we used for applicants with inventors by creating a new worksheet, Adding a Data Source (inventors) and creating a ranked list. The steps to do this are exactly the same as for applicants but make sure that the term inventors is highlighted with a blue tick in the Data box in the top left. Then add the field `inventors all` to the worksheet and follow the steps above. The result should look like this.  
+
+![_config.yml]({{ site.baseurl }} /images/tableau/inventors_ranked.png)
+
+
+
+
+
+
+
+
+
+![_config.yml]({{ site.baseurl }} /images/patentscope/simplesearch.png)
