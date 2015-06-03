@@ -63,9 +63,12 @@ To generate a shorter version of the IPC
 5. Clean up
 6. Reimport to Vantage Point. Create class and subclass thesaurii
 7. Apply to original dataset as thesaurus generate the IPC table.
-8. Export dataset fields (replacing original pizza.csv
-9. Generate new ipc file after splitting and gathering in R
-10. Import to Tableau for joining
+8. Export dataset fields (replacing original pizza.csv)
+9. Generate new ipc files in R after splitting and gathering in R on IPC class and IPC subclass detail as IPC class and IPC subclass detail. Also generated applicants_ipc as subdataset split from applicants.csv
+
+Post Clean Up
+
+Corrected Trim on all files from R separate and gather operations
 
 
 
